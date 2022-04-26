@@ -7,6 +7,7 @@ let catPosition = parseInt(getComputedStyle(cat).left);
 let bulletSpeed = 75;
 let enemySpawnRate = 4000;
 let enemySpeed = 900;
+let lives = 3;
 
 class Bullet {
     constructor() {
@@ -42,7 +43,6 @@ class Enemy {
         gameBox.append(this.enemyBody)
     }
     moveDown() {
-        console.log(this.currentYPosition)
         this.currentYPosition += 30;
         this.enemyBody.style.top = `${this.currentYPosition}px`
 
@@ -91,6 +91,7 @@ function fireBullet(event) {
                 }
             }
         ,bulletSpeed)
+
     }
 }
 
@@ -117,13 +118,20 @@ function enemiesAppearing() {
 
             let movingEnemy = setInterval(
                 function() {
-                    let move = enemy.moveDown();
+                    if(lives > 0) {
+                        let move = enemy.moveDown();
 
-                    if(!move) {
-                        clearInterval(movingEnemy)
+                        if(!move) {
+                            clearInterval(movingEnemy)
+                            lives--;
+                        }    
                     }
                 }
             ,enemySpeed)
+
+            if(lives <= 0) {
+                clearInterval(enemiesRate)
+            }
         }
     ,enemySpawnRate)
 }
