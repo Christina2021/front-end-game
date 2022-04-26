@@ -1,5 +1,7 @@
 console.log("Test")
 
+var gameStart = true;
+
 /* To-dos:
 -starting game
 
