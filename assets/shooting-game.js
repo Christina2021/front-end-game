@@ -11,9 +11,9 @@ let allEnemies = [];
 let bulletList = {};
 let enemyList = {};
 
-let bulletSpeed = 50;
+let bulletSpeed = 9;
 let enemySpawnRate = 4000;
-let enemySpeed = 900;
+let enemySpeed = 50;
 
 let lives = 3;
 let points = 0;
@@ -34,7 +34,7 @@ class Bullet {
         gameBox.append(this.bulletBody)
     }
     moveUp() {
-        this.currentYPosition += 15;
+        this.currentYPosition += 5;
         this.bulletBody.style.bottom = `${this.currentYPosition}px`
 
         if(this.currentYPosition >= 400) {
@@ -75,7 +75,7 @@ class Enemy {
         gameBox.append(this.enemyBody)
     }
     moveDown() {
-        this.currentYPosition += 30;
+        this.currentYPosition += 5;
         this.enemyBody.style.top = `${this.currentYPosition}px`
 
         if(this.currentYPosition >= 415) {
@@ -222,6 +222,8 @@ function checkCollision() {
             if((bulletValue[0] > enemyValue[0]) && (bulletValue[0] < enemyValue[1]) && (bulletValue[1] < enemyValue[2]) && (bulletValue[1] > enemyValue[3])) {
                 points++
                 console.log("Score: " + points)
+                updateScoreBoard();
+                updateEnemieRates();
 
                 bulletList[bulletKey] = ""
                 enemyList[enemyKey] = ""
@@ -241,6 +243,14 @@ function removeBulletAndEnemy(bulletRemove, enemyRemove) {
         enemy.remove(enemyRemove)
     })
 
+}
+
+function updateScoreBoard() {
+    
+}
+
+function updateEnemieRates() {
+    //change spawn and speed of enemies
 }
 
 
