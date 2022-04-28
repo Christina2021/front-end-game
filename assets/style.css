@@ -22,13 +22,13 @@ body {
     background-color: blue;
     bottom: 0;
     left: 375px;
-    z-index: 1;
+    z-index: 2;
 }
 
 .bullet {
     position: absolute;
     height: 20px;
-    width: 5px;
+    width: 3px;
     background-color: green;
     bottom: 25px;
 }
@@ -39,4 +39,5 @@ body {
     width: 40px;
     background-color: yellow;
     top: -50;
+    z-index: 1;
 }
