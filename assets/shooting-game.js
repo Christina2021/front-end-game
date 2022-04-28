@@ -11,9 +11,6 @@ let allEnemies = [];
 let bulletList = {};
 let enemyList = {};
 
-let bulletToRemove = false;
-let enemyToRemove = false;
-
 let bulletSpeed = 50;
 let enemySpawnRate = 4000;
 let enemySpeed = 900;
@@ -27,6 +24,7 @@ class Bullet {
         this.currentYPosition = 25;
         this.bulletBody = document.createElement("div");
         this.bulletName;
+        this.bulletRemove = false;
     }
     create(number) {
         this.bulletName = `bullet${number}`
@@ -52,7 +50,12 @@ class Bullet {
     remove(bulletName) {
         if(bulletName === this.bulletName){
             this.bulletBody.remove()
-            return true; 
+            this.bulletRemove = true;
+        }
+    }
+    stopBulletInterval() {
+        if (this.bulletRemove) {
+            return true
         }
     }
 }
@@ -62,6 +65,7 @@ class Enemy {
         this.currentYPosition = 0;
         this.enemyBody = document.createElement("div");
         this.enemyName;
+        this.enemyRemove = false;
     }
     create(number) {
         this.enemyName = `enemy${number}`
@@ -87,7 +91,12 @@ class Enemy {
     remove(enemyName) {
         if(enemyName === this.enemyName){
             this.enemyBody.remove()   
-            return true; 
+            this.enemyRemove = true;
+        }
+    }
+    stopEnemyInterval() {
+        if (this.enemyRemove) {
+            return true
         }
     }
 }
@@ -123,6 +132,7 @@ function fireBullet(event) {
         bullet.create(bulletNumber)
         bulletNumber++
 
+        allBullets.push(bullet)
         bulletList[bullet.bulletName] = bullet.updateCoordinates()
 
         let movingBullet = setInterval(
@@ -134,19 +144,9 @@ function fireBullet(event) {
 
                 checkCollision();
 
-                let hitEnemy = removeBullet();
+                let stop = bullet.stopBulletInterval();
 
-                if (hitEnemy) {
-                    delete bulletList[hitEnemy]
-                    let stop = bullet.remove(hitEnemy)
-                    hitEnemy = false;
-                    bulletToRemove = false;
-                    if(stop) {
-                        clearInterval(movingBullet)
-                    }
-                }
-
-                if(!move) {
+                if(!move || stop) {
                     clearInterval(movingBullet)
                 }
             }
@@ -177,6 +177,7 @@ function enemiesAppearing() {
             enemy.create(enemyNumber);
             enemyNumber++
 
+            allEnemies.push(enemy)
             enemyList[enemy.enemyName] = enemy.updateCoordinates()
 
             let movingEnemy = setInterval(
@@ -188,22 +189,14 @@ function enemiesAppearing() {
 
                         enemyList[enemy.enemyName] = enemy.updateCoordinates();
 
-                        let hitByBullet = removeEnemy();
+                        let stop = enemy.stopEnemyInterval();
 
-                        if(hitByBullet) {
-                            delete enemyList[hitByBullet]
-                            let stop = enemy.remove(hitByBullet)
-                            hitByBullet = false;
-                            enemyToRemove = false;
-                            if(stop) {
-                                clearInterval(movingEnemy)
-                            }
-                        }
-
-                        if(!move) {
+                        if(!move || stop) {
                             clearInterval(movingEnemy)
-                            lives--;
-                            console.log("Lives: " + lives)
+                            if(!move) {
+                                lives--;
+                                console.log("Lives: " + lives)
+                            }
                         }    
                     }
                 }
@@ -218,42 +211,35 @@ function enemiesAppearing() {
 }
 
 function checkCollision() {
-//    console.log("Bullet list: " + bulletList)
-//    console.log("Enemy list: " + enemyList)
     for (let [bulletKey, bulletValue] of Object.entries(bulletList)) {
         for (let [enemyKey, enemyValue] of Object.entries(enemyList)) {
             //if bullet coordinates are in the enemy coordinate box
             if((bulletValue[0] > enemyValue[0]) && (bulletValue[0] < enemyValue[1]) && (bulletValue[1] < enemyValue[2]) && (bulletValue[1] > enemyValue[3])) {
                 points++
-
                 console.log("Score: " + points)
-
-                console.log("bullet: " + bulletKey)
-                console.log("enemy: " + enemyKey)
-
 
                 bulletToRemove = bulletKey;
                 enemyToRemove = enemyKey
+
+                removeBulletAndEnemy(bulletKey, enemyKey)
             }
 
         }
     }
 }
 
-function removeBullet() {
-    if(bulletToRemove) {
-        let removeBullet = bulletToRemove;
-        bulletToRemove = false;
-        return removeBullet;
-    }
-}
+function removeBulletAndEnemy(bulletRemove, enemyRemove) {
+    allBullets.forEach(bullet => {
+        bullet.remove(bulletRemove);
+        delete bulletList[bulletRemove]
 
-function removeEnemy() {
-    if(enemyToRemove) {
-        let removeEnemy = enemyToRemove;
-        enemyToRemove = false;
-        return removeEnemy;
-    }
+    })
+
+    allEnemies.forEach(enemy => {
+        enemy.remove(enemyRemove)
+        delete enemyList[enemyRemove]
+    })
+
 }
 
 
