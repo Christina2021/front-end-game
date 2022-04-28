@@ -85,8 +85,12 @@ class Enemy {
         }     
     }
     updateCoordinates() {
-        //returns x left, x right, y top, y bottom
-        return [(this.startingXPosition), (this.startingXPosition + 40), (400 - this.currentYPosition), (400 - this.currentYPosition - 30)]
+        if(!this.enemyRemove){
+            //returns x left, x right, y top, y bottom
+            return [(this.startingXPosition), (this.startingXPosition + 40), (400 - this.currentYPosition), (400 - this.currentYPosition - 30)]
+        } else {
+            return ""
+        }
     }
     remove(enemyName) {
         if(enemyName === this.enemyName){
@@ -213,14 +217,14 @@ function enemiesAppearing() {
 function checkCollision() {
     for (let [bulletKey, bulletValue] of Object.entries(bulletList)) {
         for (let [enemyKey, enemyValue] of Object.entries(enemyList)) {
+            
             //if bullet coordinates are in the enemy coordinate box
             if((bulletValue[0] > enemyValue[0]) && (bulletValue[0] < enemyValue[1]) && (bulletValue[1] < enemyValue[2]) && (bulletValue[1] > enemyValue[3])) {
                 points++
                 console.log("Score: " + points)
 
-                bulletToRemove = bulletKey;
-                enemyToRemove = enemyKey
-
+                bulletList[bulletKey] = ""
+                enemyList[enemyKey] = ""
                 removeBulletAndEnemy(bulletKey, enemyKey)
             }
 
@@ -231,13 +235,10 @@ function checkCollision() {
 function removeBulletAndEnemy(bulletRemove, enemyRemove) {
     allBullets.forEach(bullet => {
         bullet.remove(bulletRemove);
-        delete bulletList[bulletRemove]
-
     })
 
     allEnemies.forEach(enemy => {
         enemy.remove(enemyRemove)
-        delete enemyList[enemyRemove]
     })
 
 }
