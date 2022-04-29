@@ -274,7 +274,7 @@ function resetVariables() {
 
     bulletSpeed = 9;
     enemySpawnRate = 4000;
-    enemySpeed = 50;
+    enemySpeed = 100;
 
     lives = 3;
     points = 0;
