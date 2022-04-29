@@ -13,11 +13,6 @@ let allEnemies = [];
 let bulletList = {};
 let enemyList = {};
 
-// Intervals
-let enemiesRate;
-let movingEnemy;
-
-//
 let bulletSpeed = 9;
 let enemySpawnRate = 4000;
 let enemySpeed = 50;
@@ -104,6 +99,10 @@ class Enemy {
             this.enemyBody.remove()   
             this.enemyRemove = true;
         }
+    }
+    removeAll() {
+        this.enemyBody.remove()
+        this.enemyRemove = true;
     }
     stopEnemyInterval() {
         if (this.enemyRemove) {
@@ -247,14 +246,37 @@ function updateEnemieRates() {
 }
 
 function gameOver() {
-
+    allEnemies.forEach(enemy => {
+        enemy.removeAll()
+    })
+    
+    overlay.style.display = "flex";
+    startButton.style.display = "block";
+    gameOverText.style.display = "block";
 }
 
+function resetVariables() {
+    bulletNumber = 1;
+    enemyNumber = 1;
+    allBullets = [];
+    allEnemies = [];
+    bulletList = {};
+    enemyList = {};
+
+    bulletSpeed = 9;
+    enemySpawnRate = 4000;
+    enemySpeed = 50;
+
+    lives = 3;
+    points = 0;
+}
 
 function startShooterGame() {
     if (gameStart) {
         gameStats.style.display = "block";
         cat.style.display = "block";
+
+        resetVariables()
         updateScoreBoard();
         enemiesAppearing();
         document.addEventListener("keydown", moveCat);

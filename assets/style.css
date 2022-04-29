@@ -31,8 +31,10 @@ body {
 }
 #game-over {
     display: none;
+    font-size: 70px;
+    color: rgb(162, 13, 13);
+    font-weight: bold;
 }
-
 
 
 /* Game Items */
