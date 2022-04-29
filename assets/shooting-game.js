@@ -243,6 +243,13 @@ function updateScoreBoard() {
 
 function updateEnemieRates() {
     //change spawn and speed of enemies
+    // if(points % 5 === 0) {
+        
+    // }
+
+    // MAX THAT'S STILL PLAYABLE
+    // enemySpawnRate = 1250;
+    // enemySpeed = 30;
 }
 
 function gameOver() {
@@ -253,6 +260,8 @@ function gameOver() {
     overlay.style.display = "flex";
     startButton.style.display = "block";
     gameOverText.style.display = "block";
+    cat.style.display = "none";
+    
 }
 
 function resetVariables() {
