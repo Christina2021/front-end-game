@@ -1,15 +1,18 @@
-console.log("Test")
+var startButton = document.querySelector("#start-button")
+var overlay = document.querySelector("#overlay")
 
-var gameStart = true;
+var gameStart = false;
 
-/* To-dos:
--starting game
+function start(event) {
+    event.preventDefault()
 
-New file for game:
-    Must include:
-    -box area
-    -item to move on bottom of screen
-    -items coming down from screen
-    -scoreboard/lives
-    -shooting item
-*/
+    startButton.style.display = "none";
+    overlay.style.display = "none";
+
+    gameStart = true;
+    
+    startShooterGame();
+
+}
+
+startButton.addEventListener("click", start)

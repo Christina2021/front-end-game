@@ -1,6 +1,8 @@
-console.log(gameStart)
-
 let gameBox = document.querySelector("#game-box");
+let gameStats = document.querySelector("#game-stats")
+let userLives = document.querySelector("#user-lives");
+let userPoints = document.querySelector("#user-points")
+
 let cat = document.querySelector("#cat");
 let catPosition = parseInt(getComputedStyle(cat).left);
 
@@ -11,6 +13,11 @@ let allEnemies = [];
 let bulletList = {};
 let enemyList = {};
 
+// Intervals
+let enemiesRate;
+let movingEnemy;
+
+//
 let bulletSpeed = 9;
 let enemySpawnRate = 4000;
 let enemySpeed = 50;
@@ -159,23 +166,9 @@ function fireBullet(event) {
     }
 }
 
-//Enemies Appearing
-function timeUntilEnemies() {
-    let secondsUntilEnemies = 3;
-    let countdown = setInterval(
-        function() {      
-            console.log(secondsUntilEnemies)      
-            secondsUntilEnemies -= 1;
-            if(secondsUntilEnemies===0) {
-                clearInterval(countdown)
-                enemiesAppearing()
-            }
-        }
-    , 1000)
-}
 //Falling Items
 function enemiesAppearing() {
-    let enemiesRate = setInterval(
+    enemiesRate = setInterval(
         function() {
             let enemy = new Enemy;
             enemy.create(enemyNumber);
@@ -199,17 +192,17 @@ function enemiesAppearing() {
                             clearInterval(movingEnemy)
                             if(!move) {
                                 lives--;
-                                console.log("Lives: " + lives)
+                                updateScoreBoard()
+                                
+                                if(lives <= 0) {
+                                    clearInterval(enemiesRate)
+                                    gameOver();
+                                }
                             }
                         }    
                     }
                 }
             ,enemySpeed)
-
-            if(lives <= 0) {
-                clearInterval(movingEnemy)
-                clearInterval(enemiesRate)
-            }
         }
     ,enemySpawnRate)
 }
@@ -221,7 +214,6 @@ function checkCollision() {
             //if bullet coordinates are in the enemy coordinate box
             if((bulletValue[0] > enemyValue[0]) && (bulletValue[0] < enemyValue[1]) && (bulletValue[1] < enemyValue[2]) && (bulletValue[1] > enemyValue[3])) {
                 points++
-                console.log("Score: " + points)
                 updateScoreBoard();
                 updateEnemieRates();
 
@@ -246,16 +238,27 @@ function removeBulletAndEnemy(bulletRemove, enemyRemove) {
 }
 
 function updateScoreBoard() {
-    
+    userLives.textContent = lives;
+    userPoints.textContent = points;
 }
 
 function updateEnemieRates() {
     //change spawn and speed of enemies
 }
 
+function gameOver() {
 
-if (gameStart) {
-    timeUntilEnemies();
-    document.addEventListener("keydown", moveCat);
-    document.addEventListener("keydown", fireBullet)
 }
+
+
+function startShooterGame() {
+    if (gameStart) {
+        gameStats.style.display = "block";
+        cat.style.display = "block";
+        updateScoreBoard();
+        enemiesAppearing();
+        document.addEventListener("keydown", moveCat);
+        document.addEventListener("keydown", fireBullet)
+    }
+}
+

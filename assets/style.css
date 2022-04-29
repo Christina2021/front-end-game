@@ -13,7 +13,32 @@ body {
     border: 5px solid black;
     overflow: hidden;
 }
-/* overlay for when game hasn't started yet */
+/* Overlay before game start */
+#overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#start-button {
+    z-index: 1;
+    font-size: 40px;
+    padding: 5px;
+    border-radius: 5px;
+}
+#game-over {
+    display: none;
+}
+
+
+
+/* Game Items */
+#game-stats {
+    display: none;
+}
 
 #cat {
     position: absolute;
@@ -23,6 +48,7 @@ body {
     bottom: 0;
     left: 375px;
     z-index: 2;
+    display: none;
 }
 
 .bullet {
@@ -38,6 +64,6 @@ body {
     height: 30px;
     width: 40px;
     background-color: yellow;
-    top: -50;
+    top: 0;
     z-index: 1;
 }
