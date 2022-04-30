@@ -14,8 +14,8 @@ let bulletList = {};
 let enemyList = {};
 
 let bulletSpeed = 9;
-let enemySpawnRate = 4000;
-let enemySpeed = 50;
+let enemySpawnRate = 1250;
+let enemySpeed = 100;
 
 let lives = 3;
 let points = 0;
@@ -198,7 +198,8 @@ function enemiesAppearing() {
                                     gameOver();
                                 }
                             }
-                        }    
+                        }
+                        
                     }
                 }
             ,enemySpeed)
@@ -242,14 +243,18 @@ function updateScoreBoard() {
 }
 
 function updateEnemieRates() {
+    console.log("updating")
     //change spawn and speed of enemies
-    // if(points % 5 === 0) {
-        
-    // }
+    if(points % 3 === 0) {
+        if (enemySpeed > 50) {
+            enemySpeed -= 10
+            console.log("Enemy Speed: " + enemySpeed)
+        } else if (enemySpeed >= 25) {
+            enemySpeed -= 5
+            console.log("Enemy Speed: " + enemySpeed)
+        }
+    }
 
-    // MAX THAT'S STILL PLAYABLE
-    // enemySpawnRate = 1250;
-    // enemySpeed = 30;
 }
 
 function gameOver() {
@@ -273,7 +278,6 @@ function resetVariables() {
     enemyList = {};
 
     bulletSpeed = 9;
-    enemySpawnRate = 4000;
     enemySpeed = 100;
 
     lives = 3;
